@@ -5,7 +5,7 @@ from monitoreo import views
 
 router = routers.DefaultRouter()
 router.register(r'usuarios', views.usuarioView,basename='usuarios')
-router.register(r'maquinas', views.maquinaView,basename='maquinas')
+router.register(r'maquinaProductiva', views.maquinaProductivaView,basename='maquinaProductiva')
 router.register(r'fallas',views.fallaView,basename='fallas')
 router.register(r'reporte_diario', views.reporteDiarioView,basename='reporte_diario')
 router.register(r'reporte_mensual', views.reporteMensualView, basename='reporte_mensual')
