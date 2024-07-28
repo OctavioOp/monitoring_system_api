@@ -132,7 +132,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #https://github.com/adamchainz/django-cors-headers
-CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173",
 ]
 
 REST_FRAMEWORK = {
