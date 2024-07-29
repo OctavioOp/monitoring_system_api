@@ -1,36 +1,46 @@
-from .models import usuario, maquinaProductiva, fallas,reporte_diario, reporte_mensual
-from rest_framework  import serializers
+from rest_framework import serializers
+from .models import Usuario, maquinaProductiva, fallas, reporte_diario, reporte_mensual
+from rest_framework import viewsets
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
+Usuario = get_user_model()
 
-
-class usuarioSerializer (serializers.ModelSerializer):
+class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
-        model= usuario
+        model = Usuario
+        fields = ['rut', 'nombre', 'apellido', 'email', 'password', 'creado', 'cargo']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = Usuario(
+            email=validated_data['email'],
+            rut=validated_data['rut'],
+            nombre=validated_data['nombre'],
+            apellido=validated_data['apellido'],
+            cargo=validated_data['cargo']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+    
+
+class MaquinaProductivaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = maquinaProductiva
         fields = '__all__'
-    #field= ('id', 'nombre','apellido','email','password','creado','cargo')
 
-
-class maquinaProductivaSerializer(serializers.ModelSerializer):
+class FallasSerializer(serializers.ModelSerializer):
     class Meta:
-        model= maquinaProductiva
-        #field= ('id','id_maquina','nombre_maquina','descripcion','fabricante','capacidad_produccion','potencia','operador')
+        model = fallas
         fields = '__all__'
 
-
-class fallasSerializer(serializers.ModelSerializer):
+class ReporteDiarioSerializer(serializers.ModelSerializer):
     class Meta:
-        model= fallas
-        #field = ('id', 'maquina', 'fecha_inicio', 'tiempo_falla', 'descripcion', 'gravedad')
-        fields= '__all__'
-
-class reporte_diarioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model= reporte_diario
-        #field= ('id','maquina','fecha_creacion','produccion_total','produccion_defectuosa', 'tasa_defectuosa', 'tiempo_operacion', 'tiempo_inactividad', 'calidad', 'oee')
+        model = reporte_diario
         fields = '__all__'
 
-class reporte_mensualSerializer(serializers.ModelSerializer):
+class ReporteMensualSerializer(serializers.ModelSerializer):
     class Meta:
         model = reporte_mensual
-        #field= ('id','maquina','fecha_creacion_mensual','produccion_total_mensual','produccion_defectuosa_mensual', 'tasa_defectuosa_mensual', 'tiempo_operacion_mensual', 'tiempo_inactividad_mensual', 'calidad_mensual', 'oee_mensual')
-        fields= '__all__'
+        fields = '__all__'
